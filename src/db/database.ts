@@ -47,14 +47,56 @@ CREATE TABLE IF NOT EXISTS "Photos" (
 );
 `;
 
+import pg from 'pg';
+const { Pool } = pg;
+
 let dbInstance: any = null;
 let pgPool: any = null;
+let isExternalDb = false;
 
 export async function getDb() {
-  if (!dbInstance) {
+  if (!pgPool) {
+    const isExternalConfigured = Boolean(
+      process.env.DATABASE_URL ||
+      (process.env.DB_HOST &&
+        process.env.DB_PASSWORD &&
+        process.env.DB_PASSWORD !== 'your_database_password_here' &&
+        process.env.DB_PASSWORD !== '')
+    );
+
+    if (isExternalConfigured) {
+      try {
+        console.log('Connecting to PostgreSQL database using environment variables...');
+        const externalPool = process.env.DATABASE_URL
+          ? new Pool({
+              connectionString: process.env.DATABASE_URL,
+              ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+              connectionTimeoutMillis: 4000,
+            })
+          : new Pool({
+              host: process.env.DB_HOST,
+              port: parseInt(process.env.DB_PORT || '5432', 10),
+              database: process.env.DB_NAME || 'inksight_db',
+              user: process.env.DB_USER || 'postgres',
+              password: process.env.DB_PASSWORD,
+              ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+              connectionTimeoutMillis: 4000,
+            });
+
+        // Test connectivity
+        await externalPool.query('SELECT 1');
+        await externalPool.query(SQL_CREATE_FUNCTION);
+        await seedInitialPhotosIfEmpty(externalPool);
+        pgPool = externalPool;
+        isExternalDb = true;
+        console.log('Successfully connected to external PostgreSQL database!');
+        return pgPool;
+      } catch (err) {
+        console.warn('Could not connect to external PostgreSQL, using embedded engine:', (err as any).message);
+      }
+    }
+
     const memDb = newDb();
-    
-    // Create standard PG adapter
     const adapter = memDb.adapters.createPg();
     pgPool = new adapter.Pool();
     dbInstance = memDb;
@@ -68,7 +110,105 @@ export async function getDb() {
   return pgPool;
 }
 
+const SEED_PHOTOS = [
+  {
+    path: 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1200&q=80',
+    image_name: 'Japanese Ryu Dragon Full Sleeve',
+    subjects: 'dragon, cherry blossoms, clouds, water waves',
+    style: 'japanese',
+    modern_traditional: 'traditional',
+    placement: 'full sleeve',
+    how: 'full',
+    color: 'black and gray',
+    author: { name: 'Kenji Takahashi', instagram: '@kenji_irezumi' },
+  },
+  {
+    path: 'https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&w=1200&q=80',
+    image_name: 'Illustrative Botanical Flora & Ferns',
+    subjects: 'peony, fern leaves, wild flora, botanical stem',
+    style: 'illustrative works',
+    modern_traditional: 'modern',
+    placement: 'forearm',
+    how: 'flash',
+    color: 'black and gray',
+    author: { name: 'Elena Rostova', instagram: '@elena_ink' },
+  },
+  {
+    path: 'https://images.unsplash.com/photo-1562962230-16e4623d36e6?auto=format&fit=crop&w=1200&q=80',
+    image_name: 'Neo-Traditional Tiger with Chrysanthemum',
+    subjects: 'tiger, chrysanthemum flower, dagger, ornate filigree',
+    style: 'neo-traditional',
+    modern_traditional: 'modern',
+    placement: 'thigh',
+    how: 'full',
+    color: 'colored',
+    author: { name: 'Marcus Vance', instagram: '@vance_tattoo' },
+  },
+  {
+    path: 'https://images.unsplash.com/photo-1560707303-4e980ce876ad?auto=format&fit=crop&w=1200&q=80',
+    image_name: 'Geometric Sacred Mandala Chest Piece',
+    subjects: 'mandala, sacred geometry, dotwork stippling, lotus',
+    style: 'tribal',
+    modern_traditional: 'modern',
+    placement: 'chest',
+    how: 'full',
+    color: 'black and gray',
+    author: { name: 'Aria Thorne', instagram: '@sacred_aria' },
+  },
+  {
+    path: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?auto=format&fit=crop&w=1200&q=80',
+    image_name: 'Traditional Asiatic Koi Fish & Lotus',
+    subjects: 'koi fish, lotus bloom, splash, oriental crest',
+    style: 'asiatic',
+    modern_traditional: 'traditional',
+    placement: 'calf',
+    how: 'flash',
+    color: 'colored',
+    author: { name: 'Hao Chen', instagram: '@haochen_ink' },
+  },
+  {
+    path: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=1200&q=80',
+    image_name: 'Chinese Mythical Phoenix Feathering',
+    subjects: 'phoenix, celestial flames, sun disk',
+    style: 'chinese',
+    modern_traditional: 'traditional',
+    placement: 'back',
+    how: 'full',
+    color: 'colored',
+    author: { name: 'Li Wei', instagram: '@wei_oriental_art' },
+  },
+];
+
+async function seedInitialPhotosIfEmpty(pool: any) {
+  try {
+    const check = await pool.query('SELECT COUNT(*) as count FROM "Photos"');
+    const count = Number(check.rows[0]?.count || 0);
+    if (count > 0) return;
+
+    for (const item of SEED_PHOTOS) {
+      await pool.query(
+        `INSERT INTO "Photos" (path, "image name", subjects, style, modern_traditional, placement, how, color, author)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [
+          item.path,
+          item.image_name,
+          item.subjects,
+          item.style,
+          item.modern_traditional,
+          item.placement,
+          item.how,
+          item.color,
+          item.author,
+        ]
+      );
+    }
+  } catch (err) {
+    console.warn('Could not seed initial photos:', err);
+  }
+}
+
 async function persistData(pool: any) {
+  if (isExternalDb) return;
   try {
     const res = await pool.query('SELECT * FROM "Photos" ORDER BY id ASC');
     fs.writeFileSync(SNAPSHOT_FILE, JSON.stringify(res.rows, null, 2), 'utf-8');
@@ -107,77 +247,7 @@ async function loadOrSeedData(pool: any) {
     }
   }
 
-  // Seed default curated photos
-  const seedPhotos = [
-    {
-      path: 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1200&q=80',
-      image_name: 'Japanese Ryu Dragon Full Sleeve',
-      subjects: 'dragon, cherry blossoms, clouds, water waves',
-      style: 'japanese',
-      modern_traditional: 'traditional',
-      placement: 'full sleeve',
-      how: 'full',
-      color: 'black and gray',
-      author: { name: 'Kenji Takahashi', instagram: '@kenji_irezumi' },
-    },
-    {
-      path: 'https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&w=1200&q=80',
-      image_name: 'Illustrative Botanical Flora & Ferns',
-      subjects: 'peony, fern leaves, wild flora, botanical stem',
-      style: 'illustrative works',
-      modern_traditional: 'modern',
-      placement: 'forearm',
-      how: 'flash',
-      color: 'black and gray',
-      author: { name: 'Elena Rostova', instagram: '@elena_ink' },
-    },
-    {
-      path: 'https://images.unsplash.com/photo-1562962230-16e4623d36e6?auto=format&fit=crop&w=1200&q=80',
-      image_name: 'Neo-Traditional Tiger with Chrysanthemum',
-      subjects: 'tiger, chrysanthemum flower, dagger, ornate filigree',
-      style: 'neo-traditional',
-      modern_traditional: 'modern',
-      placement: 'thigh',
-      how: 'full',
-      color: 'colored',
-      author: { name: 'Marcus Vance', instagram: '@vance_tattoo' },
-    },
-    {
-      path: 'https://images.unsplash.com/photo-1560707303-4e980ce876ad?auto=format&fit=crop&w=1200&q=80',
-      image_name: 'Geometric Sacred Mandala Chest Piece',
-      subjects: 'mandala, sacred geometry, dotwork stippling, lotus',
-      style: 'tribal',
-      modern_traditional: 'modern',
-      placement: 'chest',
-      how: 'full',
-      color: 'black and gray',
-      author: { name: 'Aria Thorne', instagram: '@sacred_aria' },
-    },
-    {
-      path: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?auto=format&fit=crop&w=1200&q=80',
-      image_name: 'Traditional Asiatic Koi Fish & Lotus',
-      subjects: 'koi fish, lotus bloom, splash, oriental crest',
-      style: 'asiatic',
-      modern_traditional: 'traditional',
-      placement: 'calf',
-      how: 'flash',
-      color: 'colored',
-      author: { name: 'Hao Chen', instagram: '@haochen_ink' },
-    },
-    {
-      path: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=1200&q=80',
-      image_name: 'Chinese Mythical Phoenix Feathering',
-      subjects: 'phoenix, celestial flames, sun disk',
-      style: 'chinese',
-      modern_traditional: 'traditional',
-      placement: 'back',
-      how: 'full',
-      color: 'colored',
-      author: { name: 'Li Wei', instagram: '@wei_oriental_art' },
-    },
-  ];
-
-  for (const item of seedPhotos) {
+  for (const item of SEED_PHOTOS) {
     await pool.query(
       `INSERT INTO "Photos" (path, "image name", subjects, style, modern_traditional, placement, how, color, author)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
