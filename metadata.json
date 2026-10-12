@@ -1,0 +1,6 @@
+{
+  "name": "InkSight - Tattoo Gallery & Tag Extractor",
+  "description": "A professional tattoo photo gallery and intelligent tag extractor powered by Gemini, featuring Postgres storage and multi-attribute filtering.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

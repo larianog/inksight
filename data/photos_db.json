@@ -1,0 +1,107 @@
+[
+  {
+    "path": "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1200&q=80",
+    "image name": "Japanese Ryu Dragon Full Sleeve",
+    "subjects": "dragon, cherry blossoms, clouds, water waves",
+    "style": "japanese",
+    "modern_traditional": "traditional",
+    "placement": "full sleeve",
+    "how": "full",
+    "color": "black and gray",
+    "author": {
+      "instagram": "@kenji_irezumi",
+      "name": "Kenji Takahashi"
+    },
+    "id": 1
+  },
+  {
+    "path": "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&w=1200&q=80",
+    "image name": "Illustrative Botanical Flora & Ferns",
+    "subjects": "peony, fern leaves, wild flora, botanical stem",
+    "style": "illustrative works",
+    "modern_traditional": "modern",
+    "placement": "forearm",
+    "how": "flash",
+    "color": "black and gray",
+    "author": {
+      "instagram": "@elena_ink",
+      "name": "Elena Rostova"
+    },
+    "id": 2
+  },
+  {
+    "path": "https://images.unsplash.com/photo-1562962230-16e4623d36e6?auto=format&fit=crop&w=1200&q=80",
+    "image name": "Neo-Traditional Tiger with Chrysanthemum",
+    "subjects": "tiger, chrysanthemum flower, dagger, ornate filigree",
+    "style": "neo-traditional",
+    "modern_traditional": "modern",
+    "placement": "thigh",
+    "how": "full",
+    "color": "colored",
+    "author": {
+      "instagram": "@vance_tattoo",
+      "name": "Marcus Vance"
+    },
+    "id": 3
+  },
+  {
+    "path": "https://images.unsplash.com/photo-1560707303-4e980ce876ad?auto=format&fit=crop&w=1200&q=80",
+    "image name": "Geometric Sacred Mandala Chest Piece",
+    "subjects": "mandala, sacred geometry, dotwork stippling, lotus",
+    "style": "tribal",
+    "modern_traditional": "modern",
+    "placement": "chest",
+    "how": "full",
+    "color": "black and gray",
+    "author": {
+      "instagram": "@sacred_aria",
+      "name": "Aria Thorne"
+    },
+    "id": 4
+  },
+  {
+    "path": "https://images.unsplash.com/photo-1542385151-efd9000785a0?auto=format&fit=crop&w=1200&q=80",
+    "image name": "Traditional Asiatic Koi Fish & Lotus",
+    "subjects": "koi fish, lotus bloom, splash, oriental crest",
+    "style": "asiatic",
+    "modern_traditional": "traditional",
+    "placement": "calf",
+    "how": "flash",
+    "color": "colored",
+    "author": {
+      "instagram": "@haochen_ink",
+      "name": "Hao Chen"
+    },
+    "id": 5
+  },
+  {
+    "path": "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=1200&q=80",
+    "image name": "Chinese Mythical Phoenix Feathering",
+    "subjects": "phoenix, celestial flames, sun disk",
+    "style": "chinese",
+    "modern_traditional": "traditional",
+    "placement": "back",
+    "how": "full",
+    "color": "colored",
+    "author": {
+      "instagram": "@wei_oriental_art",
+      "name": "Li Wei"
+    },
+    "id": 6
+  },
+  {
+    "path": "/api/blobs/1791754608414-a7e97afd3ada.png",
+    "image name": "No tattoo detected",
+    "subjects": "",
+    "style": "",
+    "modern_traditional": "modern",
+    "placement": "",
+    "how": "flash",
+    "color": "black and gray",
+    "author": {
+      "instagram": "@studioartist",
+      "name": "Studio Artist"
+    },
+    "id": 7
+  }
+]
