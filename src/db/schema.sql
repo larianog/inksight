@@ -8,7 +8,7 @@ BEGIN
     CREATE TABLE IF NOT EXISTS "Photos" (
         id SERIAL PRIMARY KEY,
         path VARCHAR(2048) NOT NULL,
-        "image name" VARCHAR(255),
+        image_name VARCHAR(255),
         subjects TEXT,
         style VARCHAR(255) NOT NULL,
         modern_traditional VARCHAR(50) NOT NULL,

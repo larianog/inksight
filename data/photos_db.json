@@ -1,7 +1,7 @@
 [
   {
     "path": "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1200&q=80",
-    "image name": "Japanese Ryu Dragon Full Sleeve",
+    "image_name": "Japanese Ryu Dragon Full Sleeve",
     "subjects": "dragon, cherry blossoms, clouds, water waves",
     "style": "japanese",
     "modern_traditional": "traditional",
@@ -16,7 +16,7 @@
   },
   {
     "path": "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&w=1200&q=80",
-    "image name": "Illustrative Botanical Flora & Ferns",
+    "image_name": "Illustrative Botanical Flora & Ferns",
     "subjects": "peony, fern leaves, wild flora, botanical stem",
     "style": "illustrative works",
     "modern_traditional": "modern",
@@ -31,7 +31,7 @@
   },
   {
     "path": "https://images.unsplash.com/photo-1562962230-16e4623d36e6?auto=format&fit=crop&w=1200&q=80",
-    "image name": "Neo-Traditional Tiger with Chrysanthemum",
+    "image_name": "Neo-Traditional Tiger with Chrysanthemum",
     "subjects": "tiger, chrysanthemum flower, dagger, ornate filigree",
     "style": "neo-traditional",
     "modern_traditional": "modern",
@@ -46,7 +46,7 @@
   },
   {
     "path": "https://images.unsplash.com/photo-1560707303-4e980ce876ad?auto=format&fit=crop&w=1200&q=80",
-    "image name": "Geometric Sacred Mandala Chest Piece",
+    "image_name": "Geometric Sacred Mandala Chest Piece",
     "subjects": "mandala, sacred geometry, dotwork stippling, lotus",
     "style": "tribal",
     "modern_traditional": "modern",
@@ -61,7 +61,7 @@
   },
   {
     "path": "https://images.unsplash.com/photo-1542385151-efd9000785a0?auto=format&fit=crop&w=1200&q=80",
-    "image name": "Traditional Asiatic Koi Fish & Lotus",
+    "image_name": "Traditional Asiatic Koi Fish & Lotus",
     "subjects": "koi fish, lotus bloom, splash, oriental crest",
     "style": "asiatic",
     "modern_traditional": "traditional",
@@ -76,7 +76,7 @@
   },
   {
     "path": "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=1200&q=80",
-    "image name": "Chinese Mythical Phoenix Feathering",
+    "image_name": "Chinese Mythical Phoenix Feathering",
     "subjects": "phoenix, celestial flames, sun disk",
     "style": "chinese",
     "modern_traditional": "traditional",
@@ -90,18 +90,33 @@
     "id": 6
   },
   {
-    "path": "/api/blobs/1791754608414-a7e97afd3ada.png",
-    "image name": "No tattoo detected",
-    "subjects": "",
-    "style": "",
+    "path": "/api/blobs/1791768019751-9d1160c4bc28.jpeg",
+    "image_name": "Justin",
+    "subjects": "botanical, geometric linework, foliage",
+    "style": "illustrative works, neo-traditional",
     "modern_traditional": "modern",
-    "placement": "",
+    "placement": "forearm, bicep",
     "how": "flash",
     "color": "black and gray",
     "author": {
-      "instagram": "@studioartist",
-      "name": "Studio Artist"
+      "instagram": "@ink_curator",
+      "name": "Studio Artisan"
     },
     "id": 7
+  },
+  {
+    "path": "/api/blobs/1791768019758-0bf95f6a755f.jpeg",
+    "image_name": "Hayden",
+    "subjects": "botanical, geometric linework, foliage",
+    "style": "illustrative works, neo-traditional",
+    "modern_traditional": "modern",
+    "placement": "forearm, bicep",
+    "how": "flash",
+    "color": "black and gray",
+    "author": {
+      "instagram": "@ink_curator",
+      "name": "Studio Artisan"
+    },
+    "id": 8
   }
 ]

@@ -36,7 +36,7 @@ export const SQL_CREATE_FUNCTION = `
 CREATE TABLE IF NOT EXISTS "Photos" (
   id SERIAL PRIMARY KEY,
   path VARCHAR(2048) NOT NULL,
-  "image name" VARCHAR(255),
+  image_name VARCHAR(255),
   subjects TEXT,
   style VARCHAR(255) NOT NULL,
   modern_traditional VARCHAR(50) NOT NULL,
@@ -187,7 +187,7 @@ async function seedInitialPhotosIfEmpty(pool: any) {
 
     for (const item of SEED_PHOTOS) {
       await pool.query(
-        `INSERT INTO "Photos" (path, "image name", subjects, style, modern_traditional, placement, how, color, author)
+        `INSERT INTO "Photos" (path, image_name, subjects, style, modern_traditional, placement, how, color, author)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
         [
           item.path,
@@ -224,7 +224,7 @@ async function loadOrSeedData(pool: any) {
       if (Array.isArray(data) && data.length > 0) {
         for (const row of data) {
           await pool.query(
-            `INSERT INTO "Photos" (id, path, "image name", subjects, style, modern_traditional, placement, how, color, author)
+            `INSERT INTO "Photos" (id, path, image_name, subjects, style, modern_traditional, placement, how, color, author)
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
             [
               row.id,
@@ -249,7 +249,7 @@ async function loadOrSeedData(pool: any) {
 
   for (const item of SEED_PHOTOS) {
     await pool.query(
-      `INSERT INTO "Photos" (path, "image name", subjects, style, modern_traditional, placement, how, color, author)
+      `INSERT INTO "Photos" (path, image_name, subjects, style, modern_traditional, placement, how, color, author)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
       [
         item.path,
@@ -284,7 +284,7 @@ export async function getAllPhotos(filters?: PhotoFilters): Promise<PhotoRecord[
     SELECT 
       id, 
       path, 
-      "image name" AS image_name, 
+      image_name AS image_name, 
       subjects, 
       style, 
       modern_traditional, 
@@ -444,9 +444,9 @@ export async function insertPhoto(photo: {
 }): Promise<PhotoRecord> {
   const pool = await getDb();
   const res = await pool.query(
-    `INSERT INTO "Photos" (path, "image name", subjects, style, modern_traditional, placement, how, color, author)
+    `INSERT INTO "Photos" (path, image_name, subjects, style, modern_traditional, placement, how, color, author)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-     RETURNING id, path, "image name" AS image_name, subjects, style, modern_traditional, placement, how, color, author`,
+     RETURNING id, path, image_name AS image_name, subjects, style, modern_traditional, placement, how, color, author`,
     [
       photo.path,
       photo.image_name,
