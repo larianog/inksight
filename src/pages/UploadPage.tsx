@@ -253,10 +253,10 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                    Occult Extraction &amp; Storage Completed!
+                    Extraction &amp; Storage Completed!
                   </h3>
                   <p className="text-xs text-slate-600 dark:text-zinc-400">
-                    {results.length} {results.length === 1 ? 'tattoo' : 'tattoos'} saved to Blob storage and permanently inserted into the PostgreSQL Photos table.
+                    {results.length} {results.length === 1 ? 'tattoo' : 'tattoos'} saved to Blob storage and permanently inserted into the database.
                   </p>
                 </div>
               </div>
@@ -284,7 +284,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
             <div className="space-y-6">
               <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
-                <span>Extracted Elements &amp; PostgreSQL Records</span>
+                <span>Results</span>
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
