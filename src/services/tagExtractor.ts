@@ -46,62 +46,59 @@ export async function extractTattooTags(
 ): Promise<ExtractedTattooData> {
   const apiKey = process.env.GEMINI_API_KEY;
 
-  if (apiKey && apiKey !== 'MY_GEMINI_API_KEY') {
-    try {
-      const ai = new GoogleGenAI({
-        apiKey: apiKey,
-        httpOptions: {
-          headers: {
-            'User-Agent': 'aistudio-build',
-          },
-        },
-      });
-
-      const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Gemini API request timed out')), 20000)
-      );
-
-      const generatePromise = ai.models.generateContent({
-        model: 'gemini-3.8-flash',
-        contents: {
-          parts: [
-            {
-              inlineData: {
-                mimeType: mimeType,
-                data: imageBase64,
-              },
-            },
-            {
-              text: TATTOO_PROMPT,
-            },
-          ],
-        },
-        config: {
-          temperature: 0,
-          responseMimeType: 'application/json',
-        },
-      });
-
-      const response = await Promise.race([generatePromise, timeoutPromise]);
-
-      const text = response.text?.trim() || '';
-      console.log('Gemini 3.8 Flash extraction response:', text);
-
-      // Clean possible code fences
-      const cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim();
-      const parsed = JSON.parse(cleaned);
-
-      return sanitizeExtractedData(parsed, originalFilename);
-    } catch (err) {
-      console.error('Gemini tag extraction error:', err);
-      // Fall through to heuristic extractor fallback
-    }
-  } else {
-    console.warn('GEMINI_API_KEY not configured or using default placeholder. Using intelligent heuristic analysis.');
+  if (!apiKey || apiKey === 'MY_GEMINI_API_KEY') {
+    throw new Error('GEMINI_API_KEY not configured. Tag extraction requires a valid API key.');
   }
 
-  // Heuristic extraction fallback when API key is unconfigured or in offline dev
-  return generateHeuristicExtraction(originalFilename);
+  try {
+    const ai = new GoogleGenAI({
+      apiKey: apiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        },
+      },
+    });
+
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Gemini API request timed out')), 100000)
+    );
+
+    const generatePromise = ai.models.generateContent({
+      model: 'gemini-3.8-flash',
+      contents: {
+        parts: [
+          {
+            inlineData: {
+              mimeType: mimeType,
+              data: imageBase64,
+            },
+          },
+          {
+            text: TATTOO_PROMPT,
+          },
+        ],
+      },
+      config: {
+        temperature: 0,
+        responseMimeType: 'application/json',
+      },
+    });
+
+    const response = await Promise.race([generatePromise, timeoutPromise]);
+
+    const text = response.text?.trim() || '';
+    console.log('Gemini 3.8 Flash extraction response:', text);
+
+    // Clean possible code fences
+    const cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+    const parsed = JSON.parse(cleaned);
+
+    return sanitizeExtractedData(parsed, originalFilename);
+  } catch (err) {
+    console.error('Gemini tag extraction error:', err);
+    throw new Error(`Failed to extract tags: ${err instanceof Error ? err.message : String(err)}`);
+  }
 }
 
 function sanitizeExtractedData(data: any, fallbackName?: string): ExtractedTattooData {
@@ -161,23 +158,3 @@ function sanitizeExtractedData(data: any, fallbackName?: string): ExtractedTatto
   };
 }
 
-function generateHeuristicExtraction(filename?: string): ExtractedTattooData {
-  const cleanName = (filename || 'Tattoo Piece')
-    .replace(/\.[^/.]+$/, '')
-    .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-
-  return {
-    name: cleanName || 'Neo-Illustrative Tattoo Study',
-    subjects: ['botanical', 'geometric linework', 'foliage'],
-    style: ['illustrative works', 'neo-traditional'],
-    modern_traditional: 'modern',
-    placement: ['forearm', 'bicep'],
-    how: 'flash',
-    color: 'black and gray',
-    author: {
-      name: 'Studio Artisan',
-      instagram: '@ink_curator',
-    },
-  };
-}
