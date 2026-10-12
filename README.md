@@ -1,8 +1,8 @@
 # InkSight — Tattoo Gallery & AI Tag Extractor
 
-InkSight is a full-stack web application designed for tattoo enthusiasts, studios, and collectors. It combines a photo gallery with an automated ingestion pipeline powered by **Gemini 3.8 Flash** (`temperature: 0`) and a **PostgreSQL** database.
+InkSight is a full-stack web application designed for tattoo enthusiasts. It combines a photo gallery with an automated ingestion pipeline powered by **Gemini 3.8 Flash** (`temperature: 0`) and a **PostgreSQL** database.
 
-The application features a mystery design aesthetic using tones of **black, cyan, and purple**, with a seamless toggle between **Dark** and **Light** modes.
+<img width="1691" height="943" alt="image" src="https://github.com/user-attachments/assets/3423f182-2c6a-4942-aa5f-f988884b6d4d" />
 
 ---
 
