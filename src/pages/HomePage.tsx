@@ -153,22 +153,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateToAdd }) => {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-8 space-y-6">
         {/* Gallery Intro Banner / Search */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[11px] font-bold uppercase tracking-widest text-cyan-700 dark:text-cyan-400 flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>The Arcane Sanctuary</span>
-              </span>
-              <span className="text-purple-400 dark:text-purple-600">•</span>
-              <span className="text-xs font-mono text-purple-800 dark:text-purple-400">PostgreSQL Store</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
-              <span>Tattoo Gallery &amp; Archive</span>
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-zinc-400 mt-1 max-w-xl">
-              Curated mystical ink indexed by Gemini tag extractor. Hover over any photo to reveal its occult elements and artist.
-            </p>
-          </div>
 
           {/* Quick Search Input */}
           <div className="relative w-full sm:w-72">

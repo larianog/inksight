@@ -144,7 +144,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
 
     setIsProcessing(true);
     setErrorMessage(null);
-    setCurrentStep('Encrypting & writing to Blob Storage...');
+    setCurrentStep('Extracting & saving image...');
 
     try {
       const formData = new FormData();
@@ -154,7 +154,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
         }
       }
 
-      setCurrentStep('Deciphering tattoo with Tag Extractor (Gemini 3.8 Flash, temp 0)...');
+      setCurrentStep('Extracting tags...');
 
       const response = await fetch('/api/upload', {
         method: 'POST',
@@ -166,7 +166,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
         throw new Error(errData.error || 'Upload pipeline failed');
       }
 
-      setCurrentStep('Sealing records into PostgreSQL database...');
+      setCurrentStep('Inserting images into database...');
       const data = await response.json();
 
       if (data.success && data.photos) {
@@ -219,18 +219,11 @@ export const UploadPage: React.FC<UploadPageProps> = ({
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-purple-900/40 pb-6">
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[11px] font-bold uppercase tracking-widest text-cyan-700 dark:text-cyan-400">
-                AI Tag Extractor Ingestion
-              </span>
-              <span className="text-purple-400 dark:text-purple-600">•</span>
-              <span className="text-xs font-mono text-purple-800 dark:text-purple-400">Gemini 3.8 Flash (T=0)</span>
-            </div>
             <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-              <span>Upload Tattoo Artifacts</span>
+              <span>Upload Tattoo Images</span>
             </h1>
             <p className="text-sm text-slate-600 dark:text-zinc-400 mt-1 max-w-xl">
-              Drag and drop or paste photos from your clipboard. Images are securely archived in Blob storage, deciphered by the LLM Tag Extractor, and recorded into PostgreSQL.
+              Drap and drop, paste photos from your clipboard or select files from your computer. Images are uploaded to a storage, tags are extracted by an AI and recorded in a database.
             </p>
           </div>
 
@@ -451,92 +444,12 @@ export const UploadPage: React.FC<UploadPageProps> = ({
               </div>
             </div>
 
-            {/* Quick Demo Tattoo Pickers */}
-            <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-3 dark:bg-[#090914] dark:border-purple-900/40">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-purple-900 dark:text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
-                  <span>Quick-test with sample occult artworks:</span>
-                </span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <button
-                  type="button"
-                  onClick={() =>
-                    addSampleTattoo(
-                      'https://images.unsplash.com/photo-1590246814883-57c61582e0e0?auto=format&fit=crop&w=800&q=80',
-                      'Japanese Geisha Sleeve'
-                    )
-                  }
-                  className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 hover:bg-purple-50/70 border border-slate-200 text-left transition-colors group cursor-pointer dark:bg-[#0e0e1e] dark:hover:bg-purple-950/50 dark:border-purple-900/40"
-                >
-                  <img
-                    src="https://images.unsplash.com/photo-1590246814883-57c61582e0e0?auto=format&fit=crop&w=200&q=80"
-                    alt="Sample"
-                    className="w-10 h-10 rounded-lg object-cover"
-                  />
-                  <div className="min-w-0">
-                    <p className="text-xs font-bold text-slate-800 group-hover:text-cyan-700 truncate dark:text-zinc-200 dark:group-hover:text-cyan-400">
-                      Geisha Arm Piece
-                    </p>
-                    <p className="text-[10px] text-purple-700 dark:text-purple-400 font-medium">Traditional Japanese</p>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    addSampleTattoo(
-                      'https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?auto=format&fit=crop&w=800&q=80',
-                      'Illustrative Wolf Head'
-                    )
-                  }
-                  className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 hover:bg-purple-50/70 border border-slate-200 text-left transition-colors group cursor-pointer dark:bg-[#0e0e1e] dark:hover:bg-purple-950/50 dark:border-purple-900/40"
-                >
-                  <img
-                    src="https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?auto=format&fit=crop&w=200&q=80"
-                    alt="Sample"
-                    className="w-10 h-10 rounded-lg object-cover"
-                  />
-                  <div className="min-w-0">
-                    <p className="text-xs font-bold text-slate-800 group-hover:text-cyan-700 truncate dark:text-zinc-200 dark:group-hover:text-cyan-400">
-                      Wolf Linework
-                    </p>
-                    <p className="text-[10px] text-purple-700 dark:text-purple-400 font-medium">Illustrative Flash</p>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    addSampleTattoo(
-                      'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80',
-                      'Snake and Peony Forearm'
-                    )
-                  }
-                  className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 hover:bg-purple-50/70 border border-slate-200 text-left transition-colors group cursor-pointer dark:bg-[#0e0e1e] dark:hover:bg-purple-950/50 dark:border-purple-900/40"
-                >
-                  <img
-                    src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=200&q=80"
-                    alt="Sample"
-                    className="w-10 h-10 rounded-lg object-cover"
-                  />
-                  <div className="min-w-0">
-                    <p className="text-xs font-bold text-slate-800 group-hover:text-cyan-700 truncate dark:text-zinc-200 dark:group-hover:text-cyan-400">
-                      Snake &amp; Peony
-                    </p>
-                    <p className="text-[10px] text-purple-700 dark:text-purple-400 font-medium">Neo-traditional Color</p>
-                  </div>
-                </button>
-              </div>
-            </div>
-
             {/* QUEUED FILES LIST */}
             {queuedItems.length > 0 && (
               <div className="space-y-4 pt-2">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>Queue for Decryption &amp; Ingestion</span>
+                    <span>Upload Queue</span>
                     <span className="px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-900 border border-cyan-200 text-xs font-mono font-bold dark:bg-cyan-950 dark:text-cyan-300 dark:border-cyan-500/40">
                       {queuedItems.length}
                     </span>
@@ -587,22 +500,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                 </div>
 
                 {/* Pipeline Execute Action */}
-                <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl bg-white border border-slate-200 shadow-xs dark:bg-[#090914] dark:border-purple-900/40">
-                  <div className="space-y-1 text-center sm:text-left">
-                    <p className="text-sm font-bold text-slate-900 dark:text-white">
-                      Execute Tag Extractor Pipeline
-                    </p>
-                    <p className="text-xs text-slate-600 dark:text-zinc-400">
-                      Uploads images to Blob storage, triggers Gemini 3.8 Flash analysis, and seals into PostgreSQL.
-                    </p>
-                    {isProcessing && (
-                      <p className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 flex items-center gap-2 pt-1 animate-pulse">
-                        <Sparkles className="w-3.5 h-3.5 animate-spin text-purple-600 dark:text-purple-400" />
-                        <span>{currentStep}</span>
-                      </p>
-                    )}
-                  </div>
-
+                <div className="pt-4 flex flex-col sm:flex-row items-center">
                   <button
                     onClick={processUploadPipeline}
                     disabled={isProcessing}
@@ -611,12 +509,12 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                     {isProcessing ? (
                       <>
                         <Sparkles className="w-4 h-4 animate-spin text-white" />
-                        <span>Deciphering...</span>
+                        <span>Uploading...</span>
                       </>
                     ) : (
                       <>
                         <Sparkles className="w-4 h-4" />
-                        <span>Extract &amp; Archive ({queuedItems.length})</span>
+                        <span> Extract Tags &amp; Upload ({queuedItems.length})</span>
                       </>
                     )}
                   </button>

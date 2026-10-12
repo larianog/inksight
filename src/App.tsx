@@ -30,14 +30,10 @@ function MainApp() {
             </span>
             <span>—</span>
             <span className="text-slate-600 dark:text-zinc-400">
-              Occult Tattoo Archive &amp; Gemini 3.8 Flash Tag Extractor
+              Tattoo Archive &amp; Gemini Tag Extractor
             </span>
           </div>
-          <div className="flex items-center gap-4 text-purple-700 dark:text-purple-400/80 font-mono text-[11px]">
-            <span>Model: gemini-3.8-flash (T=0)</span>
-            <span>•</span>
-            <span>PostgreSQL: Photos</span>
-          </div>
+          
         </div>
       </footer>
     </div>

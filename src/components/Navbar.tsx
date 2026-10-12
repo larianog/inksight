@@ -4,7 +4,7 @@ import {
   Compass,
   Moon,
   Sun,
-  Eye,
+  FolderHeart,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.tsx';
 
@@ -30,19 +30,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           className="flex items-center gap-3 text-left group focus:outline-none cursor-pointer"
         >
           <div className="relative h-10 w-10 rounded-xl bg-gradient-to-br from-cyan-500 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-all">
-            <Eye className="w-5 h-5 text-white animate-pulse" />
+            <FolderHeart className="w-5 h-5 text-white animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
                 InkSight
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-300/80 dark:bg-purple-950/80 dark:text-cyan-300 dark:border-cyan-500/30 shadow-xs">
-                Mystery AI
-              </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-zinc-400 hidden sm:block">
-              Tattoo Occult Archive &amp; Tag Extractor
+              Tattoo Archive
             </p>
           </div>
         </button>
